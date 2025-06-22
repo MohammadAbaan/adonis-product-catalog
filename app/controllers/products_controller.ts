@@ -40,4 +40,13 @@ export default class ProductsController {
       baseUrl: '/products',
     })
   }
+
+  async show({ params, view }: HttpContext) {
+    const product = await Product.query()
+      .where('id', params.id)
+      .preload('category')
+      .firstOrFail()
+
+    return view.render('pages/products/show', { product })
+  }
 }

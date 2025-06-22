@@ -7,5 +7,8 @@ router.get('/', [ProductsController, 'index'])
 
 router.get('/products', [ProductsController, 'index'])
 
+// Product detail page
+router.get('/products/:id', [ProductsController, 'show'])
+
 // Categories list
 router.get('/categories', [CategoriesController, 'index'])

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product List</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .product { margin-bottom: 1.5rem; }
+    img { max-width: 200px; height: auto; display: block; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Products</h1>
+  <ul>
+    @each(product in products)
+      <li class="product">
+        <img src="{{ product.imagePath }}" alt="{{ product.name }}">
+        <strong>{{ product.name }}</strong> — ${{ product.price }}<br>
+        <em>Category:</em> {{ product.category.name }}<br>
+        <p>{{ product.description }}</p>
+      </li>
+    @endeach
+  </ul>
+</body>
+</html>

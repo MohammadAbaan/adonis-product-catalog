@@ -1,5 +1,4 @@
 import env from '#start/env'
-import app from '@adonisjs/core/services/app'
 import { defineConfig, stores } from '@adonisjs/session'
 
 const sessionConfig = defineConfig({
@@ -13,35 +12,35 @@ const sessionConfig = defineConfig({
   clearWithBrowser: false,
 
   /**
-   * Define how long to keep the session data alive without
+   * How long to keep the session data alive without
    * any activity.
    */
   age: '2h',
 
   /**
-   * Configuration for session cookie and the
-   * cookie store
+   * Session cookie configuration
    */
   cookie: {
     path: '/',
     httpOnly: true,
-    secure: app.inProduction,
-    sameSite: 'lax',
+    secure: false,   // false for localhost dev, set true for production HTTPS
+    sameSite: 'lax', // You can try 'strict' or false if issues persist
   },
 
   /**
-   * The store to use. Make sure to validate the environment
-   * variable in order to infer the store name without any
-   * errors.
+   * The store to use. Change to 'file' to test file-based sessions.
    */
-  store: env.get('SESSION_DRIVER'),
+  store: env.get('SESSION_DRIVER', 'cookie'),
 
   /**
-   * List of configured stores. Refer documentation to see
-   * list of available stores and their config.
+   * Available session stores
    */
   stores: {
     cookie: stores.cookie(),
+    // Uncomment below to test file-based sessions:
+    // file: stores.file({ location: 'sessions' }),
+    // Uncomment below to test Redis sessions (ensure Redis is setup):
+    // redis: stores.redis({ connection: 'local' }),
   },
 })
 

@@ -2,6 +2,23 @@
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "./build"
+    "outDir": "./build",
+    "baseUrl": ".",
+    "strict": true,
+    "paths": {
+      "@ioc:Adonis/Core/*": ["node_modules/@adonisjs/core/build/src/*"],
+      "@ioc:Adonis/Lucid/*": ["node_modules/@adonisjs/lucid/build/src/*"],
+      "@ioc:Adonis/Auth/*": ["node_modules/@adonisjs/auth/build/src/*"],
+      "#app": ["app"],
+      "#models/*": ["app/Models/*"],
+      "#controllers/*": ["app/Controllers/Http/*"],
+      "#middleware/*": ["app/Middleware/*"],
+      "#exceptions/*": ["app/Exceptions/*"],
+      "#validators/*": ["app/Validators/*"],
+      "#services/*": ["app/Services/*"],
+      "#database/*": ["database/*"],
+      "#start/*": ["start/*"],
+      "#config/*": ["config/*"]
+    }
   }
 }

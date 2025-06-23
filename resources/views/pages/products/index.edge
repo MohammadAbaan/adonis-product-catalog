@@ -3,34 +3,229 @@
 <head>
   <title>Product List</title>
   <style>
-    body { font-family: sans-serif; margin: 2rem; }
-    .product { margin-bottom: 1.5rem; }
-    img { max-width: 200px; height: auto; display: block; margin-bottom: 0.5rem; }
-    .pagination { margin-top: 2rem; }
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background-color: #f5f7fa; /* subtle light background */
+      color: #333;
+    }
+
+    /* Products grid container */
+    ul.products-grid {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr); /* 5 columns */
+      gap: 1.5rem; /* space between items */
+    }
+
+    ul.products-grid li.product {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+      background-color: #fff; /* white card background */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Fix all images to same size with cropping */
+    ul.products-grid li.product img {
+      width: 100%;
+      height: 180px;          /* fixed height */
+      object-fit: cover;      /* crop and cover */
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    /* Product info container for spacing */
+    ul.products-grid li.product .product-info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Product Name */
+    ul.products-grid li.product .product-info strong {
+      font-size: 1.2rem;
+      color: #222;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    /* Price */
+    ul.products-grid li.product .product-info .price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #4CAF50;
+      margin: 0.2rem 0;
+    }
+
+    /* Category */
+    ul.products-grid li.product .product-info em {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Description */
+    ul.products-grid li.product .product-info p {
+      font-size: 0.9rem;
+      color: #444;
+      margin: 0;
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* limit to 3 lines */
+      -webkit-box-orient: vertical;
+    }
+
+    /* Buttons container inside product item */
+    ul.products-grid li.product .actions {
+      display: flex;
+      justify-content: space-between; /* space buttons apart */
+      gap: 0.6rem;
+    }
+
+    /* Style links/buttons like create button */
+    a.button, button.button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.4rem 0.9rem;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+
+      display: inline-flex;     /* align text vertically centered */
+      align-items: center;
+      justify-content: center;
+
+      transition: background-color 0.3s ease;
+      height: 34px;  /* fix consistent height for buttons */
+      min-width: 70px; /* ensure a consistent min width */
+      box-sizing: border-box;
+    }
+    a.button:hover, button.button:hover {
+      background-color: #45a049;
+    }
+
+    /* Delete button styling */
+    form button.button.delete {
+      background-color: #c00;
+    }
+    form button.button.delete:hover {
+      background-color: #a00;
+    }
+
+    /* Pagination styles */
+    .pagination {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
     .pagination a {
       padding: 0.5rem 1rem;
       border: 1px solid #ccc;
-      margin-right: 0.3rem;
-      text-decoration: none;
       color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      background: #eee;
     }
     .pagination a.active {
       background: #333;
       color: #fff;
     }
+
+    /* Form inputs and buttons */
     form { margin-bottom: 2rem; }
     select, input[type="text"], button {
       padding: 0.5rem;
       margin-right: 0.5rem;
     }
+
+    /* Header */
+    header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      font-size: 1rem;
+    }
+    header form {
+      display: inline;
+    }
+    header button, header a {
+      padding: 0.3rem 0.6rem;
+      text-decoration: none;
+      border: 1px solid #333;
+      background: #eee;
+      color: #333;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    /* Responsive adjustments */
+
+    @media (max-width: 1200px) {
+      ul.products-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+      }
+    }
+
+    @media (max-width: 768px) {
+      ul.products-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+      }
+    }
+
+    @media (max-width: 480px) {
+      ul.products-grid {
+        grid-template-columns: 1fr; /* 1 column on small phones */
+      }
+    }
+
   </style>
 </head>
 <body>
+
+  <header>
+    @if(isLoggedIn)
+      <span>Welcome, {{ user.fullName }}</span>
+      <form method="POST" action="/logout">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <button type="submit">Logout</button>
+      </form>
+    @else
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    @endif
+  </header>
+
   <h1>Products</h1>
+
+  {{-- Create button: always shown now --}}
+  {{--
+  @if(isLoggedIn)
+  --}}
+    <a href="/products/create"
+      style="display:inline-block; margin-bottom: 1rem; padding: 0.5rem 1rem; background-color:#4CAF50; color:white; text-decoration:none; border-radius:4px;">
+      + Create Product
+    </a>
+  {{--
+  @endif
+  --}}
 
   <form method="GET" action="{{ baseUrl }}">
     <input type="text" name="search" value="{{ search || '' }}" placeholder="Search products...">
-
     <select name="category">
       <option value="">All Categories</option>
       @each(cat in categories)
@@ -39,7 +234,6 @@
         </option>
       @endeach
     </select>
-
     <button type="submit">Filter</button>
     <button type="submit" name="clear" value="true">Clear Filters</button>
   </form>
@@ -47,18 +241,41 @@
   @if(products.total === 0)
     <p>No products found.</p>
   @else
-    <ul>
+    <ul class="products-grid">
       @each(product in products.all())
         <li class="product">
           <a href="/products/{{ product.id }}">
             <img src="{{ product.imagePath }}" alt="{{ product.name }}">
-            <strong>{{ product.name }}</strong>
           </a>
-          — ${{ product.price }}<br>
-          <em>Category:</em> {{ product.category.name }}<br>
-          <p>
-            {{ product.description.length > 50 ? product.description.substring(0, 50) + '...' : product.description }}
-          </p>
+
+          <div class="product-info">
+            <strong>{{ product.name }}</strong>
+            <div class="price">${{ product.price }}</div>
+            <em>Category: {{ product.category.name }}</em>
+            <p>
+              {{ product.description.length > 50 ? product.description.substring(0, 50) + '...' : product.description }}
+            </p>
+          </div>
+
+          {{-- Edit & Delete actions: always shown now --}}
+          {{--
+          @if(isLoggedIn)
+          --}}
+            <div class="actions">
+              <a href="/products/{{ product.id }}/edit" class="button">Edit</a>
+              <form
+                action="/products/{{ product.id }}/delete"
+                method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this product?');"
+                style="display:inline;"
+              >
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <button type="submit" class="button delete">Delete</button>
+              </form>
+            </div>
+          {{--
+          @endif
+          --}}
         </li>
       @endeach
     </ul>

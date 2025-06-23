@@ -3,51 +3,90 @@
 <head>
   <title>{{ product.name }} - Product Details</title>
   <style>
-    body { font-family: sans-serif; margin: 2rem; }
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background-color: #f5f7fa;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 90vh;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 2rem 3rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    a.back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: #333;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+    a.back-link:hover {
+      color: #4CAF50;
+    }
+
+    .product-detail h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+
     .product-detail img {
       max-width: 400px;
       height: auto;
-      display: block;
-      margin-bottom: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    .back-link {
-      margin-bottom: 2rem;
-      display: inline-block;
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-    .product-detail h1 {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-    }
+
     .price, .category {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      color: #4CAF50;
     }
+
+    .category {
+      font-weight: 500;
+      color: #666;
+    }
+
     .description {
       font-size: 1.1rem;
-      line-height: 1.4;
-      max-height: 4.2em; /* about 3 lines */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3; /* number of lines to show */
-      -webkit-box-orient: vertical;
+      line-height: 1.5;
       margin-top: 1rem;
+      max-height: none; /* show full description here */
+      overflow: visible;
+      -webkit-line-clamp: unset;
+      -webkit-box-orient: unset;
+      color: #444;
     }
+
   </style>
 </head>
 <body>
-  <a href="/products" class="back-link">&laquo; Back to Products</a>
+  <div class="container">
+    <a href="/products" class="back-link">&laquo; Back to Products</a>
 
-  <div class="product-detail">
-    <h1>{{ product.name }}</h1>
-    <img src="/{{ product.imagePath.replace('public/', '') }}" alt="{{ product.name }}">
-    <p class="price"><strong>Price:</strong> ${{ product.price }}</p>
-    <p class="category"><strong>Category:</strong> {{ product.category.name }}</p>
-    <p class="description">{{ product.description }}</p>
+    <div class="product-detail">
+      <h1>{{ product.name }}</h1>
+      <img src="{{ product.imagePath.replace('public/', '/') }}" alt="{{ product.name }}">
+      <p class="price"><strong>Price:</strong> ${{ product.price }}</p>
+      <p class="category"><strong>Category:</strong> {{ product.category.name }}</p>
+      <p class="description">{{ product.description }}</p>
+    </div>
   </div>
 </body>
 </html>

@@ -1,5 +1,4 @@
 import env from '#start/env'
-import app from '@adonisjs/core/services/app'
 import { Secret } from '@adonisjs/core/helpers'
 import { defineConfig } from '@adonisjs/core/http'
 
@@ -17,7 +16,7 @@ export const appKey = new Secret(env.get('APP_KEY'))
  */
 export const http = defineConfig({
   generateRequestId: true,
-  allowMethodSpoofing: false,
+  allowMethodSpoofing: true, //enabled
 
   /**
    * Enabling async local storage will let you access HTTP context
@@ -34,7 +33,7 @@ export const http = defineConfig({
     path: '/',
     maxAge: '2h',
     httpOnly: true,
-    secure: app.inProduction,
+    secure: false, //app.inProduction,
     sameSite: 'lax',
   },
 })
